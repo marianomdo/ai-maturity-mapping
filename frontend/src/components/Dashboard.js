@@ -23,7 +23,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (selectedCompany) {
-      loadCards(selectedCompany._id);
+      loadCards(selectedCompany.id);
     } else {
       setCards([]);
     }
@@ -71,7 +71,7 @@ function Dashboard() {
     try {
       const response = await cardsAPI.create({
         ...cardData,
-        companyId: selectedCompany._id
+        companyId: selectedCompany.id
       });
       const newCard = response.data;
       setCards(prev => [...prev, newCard]);
@@ -86,7 +86,7 @@ function Dashboard() {
       const response = await cardsAPI.update(cardId, cardData);
       const updatedCard = response.data;
       setCards(prev => prev.map(card => 
-        card._id === cardId ? updatedCard : card
+        card.id === cardId ? updatedCard : card
       ));
       return updatedCard;
     } catch (err) {
@@ -99,7 +99,7 @@ function Dashboard() {
       const response = await cardsAPI.updatePosition(cardId, newPosition);
       const updatedCard = response.data;
       setCards(prev => prev.map(card => 
-        card._id === cardId ? updatedCard : card
+        card.id === cardId ? updatedCard : card
       ));
       return updatedCard;
     } catch (err) {
@@ -110,7 +110,7 @@ function Dashboard() {
   const handleCardDelete = async (cardId) => {
     try {
       await cardsAPI.delete(cardId);
-      setCards(prev => prev.filter(card => card._id !== cardId));
+      setCards(prev => prev.filter(card => card.id !== cardId));
     } catch (err) {
       throw new Error(err.response?.data?.message || 'Failed to delete card');
     }

@@ -57,15 +57,15 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
         <FormControl sx={{ minWidth: 300 }}>
           <InputLabel>Select Company</InputLabel>
           <Select
-            value={selectedCompany?._id || ''}
+            value={selectedCompany?.id || ''}
             label="Select Company"
             onChange={(e) => {
-              const company = companies.find(c => c._id === e.target.value);
+              const company = companies.find(c => c.id === e.target.value);
               onCompanySelect(company);
             }}
           >
             {companies.map((company) => (
-              <MenuItem key={company._id} value={company._id}>
+              <MenuItem key={company.id} value={company.id}>
                 {company.name}
               </MenuItem>
             ))}

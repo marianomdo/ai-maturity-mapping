@@ -37,7 +37,7 @@ function MaturityBoard({
 
   const handleCardDetailsUpdate = async (cardData) => {
     try {
-      await onCardUpdate(selectedCard._id, cardData);
+      await onCardUpdate(selectedCard.id, cardData);
       setDetailsModalOpen(false);
       setSelectedCard(null);
     } catch (err) {
@@ -47,7 +47,7 @@ function MaturityBoard({
 
   const handleCardDetailsDelete = async () => {
     try {
-      await onCardDelete(selectedCard._id);
+      await onCardDelete(selectedCard.id);
       setDetailsModalOpen(false);
       setSelectedCard(null);
     } catch (err) {
@@ -75,7 +75,7 @@ function MaturityBoard({
       // Parse destination to get category and level
       const [destCategory, destLevel] = destination.droppableId.split('||');
       
-      await onCardPositionUpdate(draggableId, {
+      await onCardPositionUpdate(parseInt(draggableId), {
         categoryName: destCategory,
         levelName: destLevel
       });

@@ -95,7 +95,7 @@ function MaturityColumn({ category, level, cards, onCardCreate, onCardClick }) {
             >
               {cards.map((card, index) => (
                 <AICard
-                  key={card._id}
+                  key={card.id}
                   card={card}
                   index={index}
                   onClick={() => onCardClick(card)}

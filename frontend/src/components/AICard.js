@@ -10,7 +10,7 @@ import { DragIndicator } from '@mui/icons-material';
 
 function AICard({ card, index, onClick }) {
   return (
-    <Draggable draggableId={card._id} index={index}>
+    <Draggable draggableId={card.id.toString()} index={index}>
       {(provided, snapshot) => (
         <Card
           ref={provided.innerRef}
