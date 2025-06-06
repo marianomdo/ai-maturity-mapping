@@ -13,7 +13,24 @@ router.get('/company/:companyId', async (req, res) => {
       WHERE ac.company_id = $1 
       ORDER BY ac.category_name, ac.level_name
     `, [req.params.companyId]);
-    res.json(result.rows);
+    
+    // Transform all cards from snake_case to camelCase
+    const transformedCards = result.rows.map(card => ({
+      id: card.id,
+      companyId: card.company_id,
+      categoryName: card.category_name,
+      levelName: card.level_name,
+      title: card.title,
+      description: card.description,
+      currentScoreJustification: card.current_score_justification,
+      nextStepsRecommendations: card.next_steps_recommendations,
+      relevantLink: card.relevant_link,
+      companyName: card.company_name,
+      createdAt: card.created_at,
+      updatedAt: card.updated_at
+    }));
+    
+    res.json(transformedCards);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -33,7 +50,25 @@ router.get('/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Card not found' });
     }
-    res.json(result.rows[0]);
+    
+    // Transform snake_case to camelCase for frontend
+    const card = result.rows[0];
+    const transformedCard = {
+      id: card.id,
+      companyId: card.company_id,
+      categoryName: card.category_name,
+      levelName: card.level_name,
+      title: card.title,
+      description: card.description,
+      currentScoreJustification: card.current_score_justification,
+      nextStepsRecommendations: card.next_steps_recommendations,
+      relevantLink: card.relevant_link,
+      companyName: card.company_name,
+      createdAt: card.created_at,
+      updatedAt: card.updated_at
+    };
+    
+    res.json(transformedCard);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -97,7 +132,24 @@ router.post('/', [
       WHERE ac.id = $1
     `, [result.rows[0].id]);
     
-    res.status(201).json(cardWithCompany.rows[0]);
+    // Transform snake_case to camelCase for frontend
+    const card = cardWithCompany.rows[0];
+    const transformedCard = {
+      id: card.id,
+      companyId: card.company_id,
+      categoryName: card.category_name,
+      levelName: card.level_name,
+      title: card.title,
+      description: card.description,
+      currentScoreJustification: card.current_score_justification,
+      nextStepsRecommendations: card.next_steps_recommendations,
+      relevantLink: card.relevant_link,
+      companyName: card.company_name,
+      createdAt: card.created_at,
+      updatedAt: card.updated_at
+    };
+    
+    res.status(201).json(transformedCard);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -175,7 +227,24 @@ router.put('/:id', [
       WHERE ac.id = $1
     `, [result.rows[0].id]);
 
-    res.json(cardWithCompany.rows[0]);
+    // Transform snake_case to camelCase for frontend
+    const card = cardWithCompany.rows[0];
+    const transformedCard = {
+      id: card.id,
+      companyId: card.company_id,
+      categoryName: card.category_name,
+      levelName: card.level_name,
+      title: card.title,
+      description: card.description,
+      currentScoreJustification: card.current_score_justification,
+      nextStepsRecommendations: card.next_steps_recommendations,
+      relevantLink: card.relevant_link,
+      companyName: card.company_name,
+      createdAt: card.created_at,
+      updatedAt: card.updated_at
+    };
+
+    res.json(transformedCard);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -217,7 +286,24 @@ router.patch('/:id/position', [
       WHERE ac.id = $1
     `, [result.rows[0].id]);
 
-    res.json(cardWithCompany.rows[0]);
+    // Transform snake_case to camelCase for frontend
+    const card = cardWithCompany.rows[0];
+    const transformedCard = {
+      id: card.id,
+      companyId: card.company_id,
+      categoryName: card.category_name,
+      levelName: card.level_name,
+      title: card.title,
+      description: card.description,
+      currentScoreJustification: card.current_score_justification,
+      nextStepsRecommendations: card.next_steps_recommendations,
+      relevantLink: card.relevant_link,
+      companyName: card.company_name,
+      createdAt: card.created_at,
+      updatedAt: card.updated_at
+    };
+
+    res.json(transformedCard);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
