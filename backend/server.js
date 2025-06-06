@@ -1,8 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
+const { connectDB } = require('./config/database');
 require('dotenv').config();
 
 const app = express();
@@ -11,17 +11,6 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-
-// Connect to MongoDB
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ai-maturity-db');
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-};
 
 // Routes
 app.use('/api/companies', require('./routes/companies'));

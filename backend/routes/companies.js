@@ -1,13 +1,13 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const Company = require('../models/Company');
+const { pool } = require('../config/database');
 const router = express.Router();
 
 // Get all companies
 router.get('/', async (req, res) => {
   try {
-    const companies = await Company.find().sort({ name: 1 });
-    res.json(companies);
+    const result = await pool.query('SELECT * FROM companies ORDER BY name ASC');
+    res.json(result.rows);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -17,11 +17,11 @@ router.get('/', async (req, res) => {
 // Get company by ID
 router.get('/:id', async (req, res) => {
   try {
-    const company = await Company.findById(req.params.id);
-    if (!company) {
+    const result = await pool.query('SELECT * FROM companies WHERE id = $1', [req.params.id]);
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Company not found' });
     }
-    res.json(company);
+    res.json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -41,14 +41,15 @@ router.post('/', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const company = new Company({
-      name: req.body.name
-    });
+    const { name } = req.body;
+    const result = await pool.query(
+      'INSERT INTO companies (name) VALUES ($1) RETURNING *',
+      [name]
+    );
 
-    const savedCompany = await company.save();
-    res.status(201).json(savedCompany);
+    res.status(201).json(result.rows[0]);
   } catch (error) {
-    if (error.code === 11000) {
+    if (error.code === '23505') { // unique_violation
       return res.status(400).json({ message: 'Company name already exists' });
     }
     console.error(error);
@@ -69,19 +70,19 @@ router.put('/:id', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const company = await Company.findByIdAndUpdate(
-      req.params.id,
-      { name: req.body.name },
-      { new: true, runValidators: true }
+    const { name } = req.body;
+    const result = await pool.query(
+      'UPDATE companies SET name = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+      [name, req.params.id]
     );
 
-    if (!company) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Company not found' });
     }
 
-    res.json(company);
+    res.json(result.rows[0]);
   } catch (error) {
-    if (error.code === 11000) {
+    if (error.code === '23505') { // unique_violation
       return res.status(400).json({ message: 'Company name already exists' });
     }
     console.error(error);
@@ -92,8 +93,8 @@ router.put('/:id', [
 // Delete company
 router.delete('/:id', async (req, res) => {
   try {
-    const company = await Company.findByIdAndDelete(req.params.id);
-    if (!company) {
+    const result = await pool.query('DELETE FROM companies WHERE id = $1 RETURNING *', [req.params.id]);
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Company not found' });
     }
     res.json({ message: 'Company deleted successfully' });

@@ -1,16 +1,19 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const AICard = require('../models/AICard');
-const Company = require('../models/Company');
+const { pool } = require('../config/database');
 const router = express.Router();
 
 // Get all cards for a company
 router.get('/company/:companyId', async (req, res) => {
   try {
-    const cards = await AICard.find({ companyId: req.params.companyId })
-      .populate('companyId', 'name')
-      .sort({ categoryName: 1, levelName: 1 });
-    res.json(cards);
+    const result = await pool.query(`
+      SELECT ac.*, c.name as company_name 
+      FROM ai_cards ac 
+      JOIN companies c ON ac.company_id = c.id 
+      WHERE ac.company_id = $1 
+      ORDER BY ac.category_name, ac.level_name
+    `, [req.params.companyId]);
+    res.json(result.rows);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -20,11 +23,17 @@ router.get('/company/:companyId', async (req, res) => {
 // Get card by ID
 router.get('/:id', async (req, res) => {
   try {
-    const card = await AICard.findById(req.params.id).populate('companyId', 'name');
-    if (!card) {
+    const result = await pool.query(`
+      SELECT ac.*, c.name as company_name 
+      FROM ai_cards ac 
+      JOIN companies c ON ac.company_id = c.id 
+      WHERE ac.id = $1
+    `, [req.params.id]);
+    
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Card not found' });
     }
-    res.json(card);
+    res.json(result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -33,7 +42,7 @@ router.get('/:id', async (req, res) => {
 
 // Create new card
 router.post('/', [
-  body('companyId').isMongoId().withMessage('Valid company ID is required'),
+  body('companyId').isInt({ min: 1 }).withMessage('Valid company ID is required'),
   body('categoryName')
     .isIn(['Data Foundation', 'AI Strategy', 'Talent & Culture', 'Technology & Tools'])
     .withMessage('Invalid category name'),
@@ -56,16 +65,39 @@ router.post('/', [
     }
 
     // Verify company exists
-    const company = await Company.findById(req.body.companyId);
-    if (!company) {
+    const companyCheck = await pool.query('SELECT id FROM companies WHERE id = $1', [req.body.companyId]);
+    if (companyCheck.rows.length === 0) {
       return res.status(404).json({ message: 'Company not found' });
     }
 
-    const card = new AICard(req.body);
-    const savedCard = await card.save();
-    await savedCard.populate('companyId', 'name');
+    const {
+      companyId,
+      categoryName,
+      levelName,
+      title,
+      description = '',
+      currentScoreJustification = '',
+      nextStepsRecommendations = '',
+      relevantLink = ''
+    } = req.body;
+
+    const result = await pool.query(`
+      INSERT INTO ai_cards (
+        company_id, category_name, level_name, title, description, 
+        current_score_justification, next_steps_recommendations, relevant_link
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+      RETURNING *
+    `, [companyId, categoryName, levelName, title, description, currentScoreJustification, nextStepsRecommendations, relevantLink]);
+
+    // Get the card with company name
+    const cardWithCompany = await pool.query(`
+      SELECT ac.*, c.name as company_name 
+      FROM ai_cards ac 
+      JOIN companies c ON ac.company_id = c.id 
+      WHERE ac.id = $1
+    `, [result.rows[0].id]);
     
-    res.status(201).json(savedCard);
+    res.status(201).json(cardWithCompany.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -98,17 +130,52 @@ router.put('/:id', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const card = await AICard.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate('companyId', 'name');
+    const updates = [];
+    const values = [];
+    let paramIndex = 1;
 
-    if (!card) {
+    Object.keys(req.body).forEach(key => {
+      if (req.body[key] !== undefined) {
+        const dbField = key === 'companyId' ? 'company_id' : 
+                       key === 'categoryName' ? 'category_name' :
+                       key === 'levelName' ? 'level_name' :
+                       key === 'currentScoreJustification' ? 'current_score_justification' :
+                       key === 'nextStepsRecommendations' ? 'next_steps_recommendations' :
+                       key === 'relevantLink' ? 'relevant_link' : key;
+        
+        updates.push(`${dbField} = $${paramIndex}`);
+        values.push(req.body[key]);
+        paramIndex++;
+      }
+    });
+
+    if (updates.length === 0) {
+      return res.status(400).json({ message: 'No valid fields to update' });
+    }
+
+    updates.push(`updated_at = CURRENT_TIMESTAMP`);
+    values.push(req.params.id);
+
+    const result = await pool.query(`
+      UPDATE ai_cards 
+      SET ${updates.join(', ')} 
+      WHERE id = $${paramIndex} 
+      RETURNING *
+    `, values);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Card not found' });
     }
 
-    res.json(card);
+    // Get the card with company name
+    const cardWithCompany = await pool.query(`
+      SELECT ac.*, c.name as company_name 
+      FROM ai_cards ac 
+      JOIN companies c ON ac.company_id = c.id 
+      WHERE ac.id = $1
+    `, [result.rows[0].id]);
+
+    res.json(cardWithCompany.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -130,20 +197,27 @@ router.patch('/:id/position', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const card = await AICard.findByIdAndUpdate(
-      req.params.id,
-      { 
-        categoryName: req.body.categoryName,
-        levelName: req.body.levelName
-      },
-      { new: true, runValidators: true }
-    ).populate('companyId', 'name');
+    const { categoryName, levelName } = req.body;
+    const result = await pool.query(`
+      UPDATE ai_cards 
+      SET category_name = $1, level_name = $2, updated_at = CURRENT_TIMESTAMP 
+      WHERE id = $3 
+      RETURNING *
+    `, [categoryName, levelName, req.params.id]);
 
-    if (!card) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Card not found' });
     }
 
-    res.json(card);
+    // Get the card with company name
+    const cardWithCompany = await pool.query(`
+      SELECT ac.*, c.name as company_name 
+      FROM ai_cards ac 
+      JOIN companies c ON ac.company_id = c.id 
+      WHERE ac.id = $1
+    `, [result.rows[0].id]);
+
+    res.json(cardWithCompany.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -153,8 +227,8 @@ router.patch('/:id/position', [
 // Delete card
 router.delete('/:id', async (req, res) => {
   try {
-    const card = await AICard.findByIdAndDelete(req.params.id);
-    if (!card) {
+    const result = await pool.query('DELETE FROM ai_cards WHERE id = $1 RETURNING *', [req.params.id]);
+    if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Card not found' });
     }
     res.json({ message: 'Card deleted successfully' });
