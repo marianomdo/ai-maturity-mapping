@@ -49,19 +49,39 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        sx={{ 
+          color: '#3D52A0',
+          fontWeight: 'bold',
+          letterSpacing: '0.05em',
+          mb: 3
+        }}
+      >
         Company Selection
       </Typography>
       
-      <Box display="flex" gap={2} alignItems="center">
+      <Box display="flex" gap={3} alignItems="center" flexWrap="wrap">
         <FormControl sx={{ minWidth: 300 }}>
-          <InputLabel>Select Company</InputLabel>
+          <InputLabel sx={{ color: '#7091E6' }}>Select Company</InputLabel>
           <Select
             value={selectedCompany?.id || ''}
             label="Select Company"
             onChange={(e) => {
               const company = companies.find(c => c.id === e.target.value);
               onCompanySelect(company);
+            }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#ADBBDA'
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#7091E6'
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: '#3D52A0'
+              }
             }}
           >
             {companies.map((company) => (
@@ -76,13 +96,35 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
           variant="contained"
           startIcon={<Add />}
           onClick={() => setCreateDialogOpen(true)}
+          sx={{
+            background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 100%)',
+            boxShadow: '0 4px 12px rgba(61,82,160,0.4)',
+            borderRadius: 2,
+            px: 3,
+            py: 1,
+            '&:hover': {
+              background: 'linear-gradient(135deg, #7091E6 0%, #8697C4 100%)',
+              boxShadow: '0 6px 16px rgba(61,82,160,0.5)',
+              transform: 'translateY(-1px)'
+            }
+          }}
         >
           Add Company
         </Button>
       </Box>
 
       {selectedCompany && (
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        <Typography 
+          variant="body1" 
+          sx={{ 
+            mt: 3,
+            p: 2,
+            background: 'linear-gradient(135deg, rgba(237,232,245,0.7) 0%, rgba(173,187,218,0.5) 100%)',
+            borderRadius: 2,
+            color: '#3D52A0',
+            border: '1px solid rgba(173,187,218,0.3)'
+          }}
+        >
           Currently viewing AI maturity board for: <strong>{selectedCompany.name}</strong>
         </Typography>
       )}

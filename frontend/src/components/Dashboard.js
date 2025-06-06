@@ -126,17 +126,22 @@ function Dashboard() {
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        AI Maturity Dashboard
-      </Typography>
-      
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
 
-      <Paper elevation={1} sx={{ p: 2, mb: 3 }}>
+      <Paper 
+        elevation={8} 
+        sx={{ 
+          p: 3, 
+          mb: 4,
+          borderRadius: 3,
+          background: 'rgba(255,255,255,0.95)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
         <CompanySelector
           companies={companies}
           selectedCompany={selectedCompany}
@@ -155,8 +160,30 @@ function Dashboard() {
           onCardDelete={handleCardDelete}
         />
       ) : (
-        <Paper elevation={1} sx={{ p: 4, textAlign: 'center' }}>
-          <Typography variant="h6" color="text.secondary">
+        <Paper 
+          elevation={8} 
+          sx={{ 
+            p: 6, 
+            textAlign: 'center',
+            borderRadius: 3,
+            background: 'rgba(255,255,255,0.95)',
+            backdropFilter: 'blur(10px)'
+          }}
+        >
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              color: '#3D52A0',
+              fontWeight: 'bold',
+              mb: 2
+            }}
+          >
+            Get Started
+          </Typography>
+          <Typography 
+            variant="body1" 
+            sx={{ color: '#7091E6' }}
+          >
             Please create or select a company to view its AI maturity board
           </Typography>
         </Paper>
