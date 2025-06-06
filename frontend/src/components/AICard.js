@@ -15,20 +15,26 @@ function AICard({ card, index, onClick }) {
         <Card
           ref={provided.innerRef}
           {...provided.draggableProps}
+          {...provided.dragHandleProps}
           sx={{
             mb: 1,
-            cursor: 'pointer',
+            cursor: snapshot.isDragging ? 'grabbing' : 'grab',
             bgcolor: snapshot.isDragging ? 'action.selected' : 'background.paper',
             transform: snapshot.isDragging ? 'rotate(5deg)' : 'none',
             '&:hover': {
               bgcolor: 'action.hover'
             }
           }}
-          onClick={onClick}
+          onClick={(e) => {
+            // Only trigger onClick if not actively dragging
+            if (!snapshot.isDragging) {
+              onClick();
+            }
+          }}
         >
           <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
             <Box display="flex" alignItems="center" gap={1}>
-              <Box {...provided.dragHandleProps}>
+              <Box>
                 <DragIndicator fontSize="small" color="action" />
               </Box>
               <Typography 
