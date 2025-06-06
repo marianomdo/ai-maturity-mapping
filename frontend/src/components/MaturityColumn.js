@@ -17,7 +17,7 @@ import { Add } from '@mui/icons-material';
 import AICard from './AICard';
 import { LEVEL_COLORS } from '../constants/maturityData';
 
-function MaturityColumn({ category, level, card, onCardCreate, onCardClick, isEmpty, isCurrentLevel }) {
+function MaturityColumn({ category, level, card, onCardCreate, onCardClick, showAddButton, isCurrentLevel }) {
   const [addCardDialogOpen, setAddCardDialogOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
   const [creating, setCreating] = useState(false);
@@ -68,7 +68,7 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, isEm
         }}
       >
         {/* Add Card Button - only show if this category has no card yet */}
-        {isEmpty && (
+        {showAddButton && (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <Tooltip title={`Add ${category} Card`}>
               <IconButton 
@@ -89,11 +89,10 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, isEm
               ref={provided.innerRef}
               {...provided.droppableProps}
               sx={{
-                minHeight: isEmpty ? '0px' : '100px',
+                minHeight: '100px',
                 bgcolor: snapshot.isDraggingOver ? levelColor + '50' : 'transparent',
                 borderRadius: 1,
-                p: 0.5,
-                display: isEmpty ? 'none' : 'block'
+                p: 0.5
               }}
             >
               {card && (

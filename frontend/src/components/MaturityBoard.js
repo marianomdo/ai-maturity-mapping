@@ -165,7 +165,7 @@ function MaturityBoard({
                       card={categoryCard && categoryCard.levelName === level ? categoryCard : null}
                       onCardCreate={onCardCreate}
                       onCardClick={handleCardClick}
-                      isEmpty={!categoryCard}
+                      showAddButton={!categoryCard && levelIndex === 0} // Only show + button in first column if no card exists
                       isCurrentLevel={categoryCard && categoryCard.levelName === level}
                     />
                   </Grid>
