@@ -58,13 +58,17 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
   return (
     <>
       <Paper 
-        elevation={2} 
+        elevation={isCurrentLevel ? 2 : 0} 
         sx={{ 
           height: '120px',
           p: 1,
-          bgcolor: isCurrentLevel ? levelColor + '40' : (levelColor + '10'), // Stronger color if current level
-          border: isCurrentLevel ? `3px solid ${levelColor}` : `1px solid ${levelColor}`,
-          position: 'relative'
+          bgcolor: isCurrentLevel ? levelColor + '40' : (levelColor + '05'), // Much fainter for empty slots
+          border: isCurrentLevel ? `3px solid ${levelColor}` : 'none', // No border for empty blocks
+          position: 'relative',
+          '&:hover': !isCurrentLevel ? {
+            bgcolor: levelColor + '10',
+            transition: 'background-color 0.2s ease'
+          } : {}
         }}
       >
         {/* Droppable Area - always present for drag and drop */}
@@ -76,13 +80,15 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
               sx={{
                 height: '100%',
                 minHeight: '100px',
-                bgcolor: snapshot.isDraggingOver ? levelColor + '50' : 'transparent',
+                bgcolor: snapshot.isDraggingOver ? levelColor + '60' : 'transparent',
                 borderRadius: 1,
                 p: 0.5,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                border: snapshot.isDraggingOver ? `2px dashed ${levelColor}` : 'none',
+                transition: 'all 0.2s ease'
               }}
             >
               {card && (
