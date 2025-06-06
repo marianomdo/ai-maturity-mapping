@@ -67,32 +67,22 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
           position: 'relative'
         }}
       >
-        {/* Add Card Button - only show if this category has no card yet */}
-        {showAddButton && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            <Tooltip title={`Add ${category} Card`}>
-              <IconButton 
-                size="large" 
-                onClick={() => setAddCardDialogOpen(true)}
-                sx={{ bgcolor: 'white', '&:hover': { bgcolor: 'grey.100' } }}
-              >
-                <Add />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
-
-        {/* Droppable Area */}
+        {/* Droppable Area - always present for drag and drop */}
         <Droppable droppableId={droppableId}>
           {(provided, snapshot) => (
             <Box
               ref={provided.innerRef}
               {...provided.droppableProps}
               sx={{
+                height: '100%',
                 minHeight: '100px',
                 bgcolor: snapshot.isDraggingOver ? levelColor + '50' : 'transparent',
                 borderRadius: 1,
-                p: 0.5
+                p: 0.5,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
               {card && (
@@ -103,6 +93,20 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
                   onClick={() => onCardClick(card)}
                 />
               )}
+              
+              {/* Add Card Button - only show if this category has no card yet */}
+              {showAddButton && !card && (
+                <Tooltip title={`Add ${category} Card`}>
+                  <IconButton 
+                    size="large" 
+                    onClick={() => setAddCardDialogOpen(true)}
+                    sx={{ bgcolor: 'white', '&:hover': { bgcolor: 'grey.100' } }}
+                  >
+                    <Add />
+                  </IconButton>
+                </Tooltip>
+              )}
+              
               {provided.placeholder}
             </Box>
           )}
