@@ -24,7 +24,6 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
   const [error, setError] = useState(null);
 
   const droppableId = `${category}||${level}`;
-  const levelColor = LEVEL_COLORS[level];
 
   const handleAddCard = async () => {
     if (!newCardTitle.trim()) {
@@ -55,44 +54,40 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
     setError(null);
   };
 
-  // Define gradient backgrounds for each level
-  const getLevelGradient = (level) => {
-    const gradients = {
-      'Level 0: Nascent': 'linear-gradient(135deg, rgba(61,82,160,0.1) 0%, rgba(61,82,160,0.05) 100%)',
-      'Level 1: Awareness': 'linear-gradient(135deg, rgba(61,82,160,0.2) 0%, rgba(112,145,230,0.1) 100%)',
-      'Level 2: Developing': 'linear-gradient(135deg, rgba(112,145,230,0.2) 0%, rgba(134,151,196,0.1) 100%)',
-      'Level 3: Defined': 'linear-gradient(135deg, rgba(134,151,196,0.2) 0%, rgba(173,187,218,0.1) 100%)',
-      'Level 4: Optimized': 'linear-gradient(135deg, rgba(173,187,218,0.2) 0%, rgba(237,232,245,0.1) 100%)'
+  // Define solid colors for each level using the palette
+  const getLevelColor = (level) => {
+    const colors = {
+      'Level 0: Nascent': '#3D52A0',      // Deep blue
+      'Level 1: Awareness': '#7091E6',    // Bright blue  
+      'Level 2: Developing': '#8697C4',   // Lavender
+      'Level 3: Defined': '#ADBBDA',      // Light purple
+      'Level 4: Optimized': '#EDE8F5'     // Very light lavender
     };
-    return gradients[level] || 'transparent';
-  };
-
-  const getCurrentLevelGradient = (level) => {
-    const gradients = {
-      'Level 0: Nascent': 'linear-gradient(135deg, rgba(61,82,160,0.8) 0%, rgba(61,82,160,0.6) 100%)',
-      'Level 1: Awareness': 'linear-gradient(135deg, rgba(61,82,160,0.8) 0%, rgba(112,145,230,0.6) 100%)',
-      'Level 2: Developing': 'linear-gradient(135deg, rgba(112,145,230,0.8) 0%, rgba(134,151,196,0.6) 100%)',
-      'Level 3: Defined': 'linear-gradient(135deg, rgba(134,151,196,0.8) 0%, rgba(173,187,218,0.6) 100%)',
-      'Level 4: Optimized': 'linear-gradient(135deg, rgba(173,187,218,0.8) 0%, rgba(237,232,245,0.6) 100%)'
-    };
-    return gradients[level] || 'transparent';
+    return colors[level] || '#3D52A0';
   };
 
   return (
     <>
       <Paper 
-        elevation={isCurrentLevel ? 6 : 0} 
+        elevation={isCurrentLevel ? 4 : 0} 
         sx={{ 
           height: '120px',
           p: 1,
-          background: isCurrentLevel ? getCurrentLevelGradient(level) : getLevelGradient(level),
-          border: isCurrentLevel ? '3px solid rgba(255,255,255,0.5)' : 'none',
+          backgroundColor: isCurrentLevel 
+            ? getLevelColor(level) 
+            : `${getLevelColor(level)}20`, // 20% opacity for empty slots
+          border: isCurrentLevel 
+            ? `3px solid ${getLevelColor(level)}` 
+            : `1px solid ${getLevelColor(level)}40`,
           borderRadius: 2,
           position: 'relative',
-          boxShadow: isCurrentLevel ? '0 8px 25px rgba(61,82,160,0.3)' : 'none',
+          boxShadow: isCurrentLevel 
+            ? `0 4px 12px ${getLevelColor(level)}40` 
+            : 'none',
           '&:hover': !isCurrentLevel ? {
-            background: getLevelGradient(level).replace('0.1', '0.15'),
-            transition: 'all 0.3s ease'
+            backgroundColor: `${getLevelColor(level)}30`,
+            borderColor: `${getLevelColor(level)}60`,
+            transition: 'all 0.2s ease'
           } : {}
         }}
       >
@@ -105,24 +100,31 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
               sx={{
                 height: '100%',
                 minHeight: '100px',
-                background: snapshot.isDraggingOver ? getCurrentLevelGradient(level) : 'transparent',
+                backgroundColor: snapshot.isDraggingOver 
+                  ? `${getLevelColor(level)}60` 
+                  : 'transparent',
                 borderRadius: 1,
                 p: 0.5,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                border: snapshot.isDraggingOver ? '3px dashed rgba(255,255,255,0.8)' : 'none',
-                transition: 'all 0.3s ease'
+                border: snapshot.isDraggingOver 
+                  ? `3px dashed ${getLevelColor(level)}` 
+                  : 'none',
+                transition: 'all 0.2s ease',
+                overflow: 'hidden' // Ensure cards don't overflow
               }}
             >
               {card && (
-                <AICard
-                  key={card.id}
-                  card={card}
-                  index={0}
-                  onClick={() => onCardClick(card)}
-                />
+                <Box sx={{ width: '100%', height: 'fit-content' }}>
+                  <AICard
+                    key={card.id}
+                    card={card}
+                    index={0}
+                    onClick={() => onCardClick(card)}
+                  />
+                </Box>
               )}
               
               {/* Add Card Button - only show if this category has no card yet */}
@@ -132,11 +134,13 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
                     size="large" 
                     onClick={() => setAddCardDialogOpen(true)}
                     sx={{ 
-                      background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 100%)',
-                      color: 'white',
-                      boxShadow: '0 4px 12px rgba(61,82,160,0.4)',
+                      backgroundColor: '#FFFFFF',
+                      color: '#3D52A0',
+                      border: `2px solid #3D52A0`,
+                      boxShadow: '0 2px 8px rgba(61,82,160,0.2)',
                       '&:hover': { 
-                        background: 'linear-gradient(135deg, #7091E6 0%, #8697C4 100%)',
+                        backgroundColor: '#3D52A0',
+                        color: '#FFFFFF',
                         transform: 'scale(1.1)',
                         transition: 'all 0.2s ease'
                       } 

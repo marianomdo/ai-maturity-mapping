@@ -97,13 +97,14 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
           startIcon={<Add />}
           onClick={() => setCreateDialogOpen(true)}
           sx={{
-            background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 100%)',
-            boxShadow: '0 4px 12px rgba(61,82,160,0.4)',
+            backgroundColor: '#7091E6',
+            color: 'white',
+            boxShadow: '0 4px 12px rgba(112,145,230,0.4)',
             borderRadius: 2,
             px: 3,
             py: 1,
             '&:hover': {
-              background: 'linear-gradient(135deg, #7091E6 0%, #8697C4 100%)',
+              backgroundColor: '#3D52A0',
               boxShadow: '0 6px 16px rgba(61,82,160,0.5)',
               transform: 'translateY(-1px)'
             }
@@ -119,10 +120,10 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
           sx={{ 
             mt: 3,
             p: 2,
-            background: 'linear-gradient(135deg, rgba(237,232,245,0.7) 0%, rgba(173,187,218,0.5) 100%)',
+            backgroundColor: '#EDE8F5',
             borderRadius: 2,
             color: '#3D52A0',
-            border: '1px solid rgba(173,187,218,0.3)'
+            border: '2px solid #ADBBDA'
           }}
         >
           Currently viewing AI maturity board for: <strong>{selectedCompany.name}</strong>

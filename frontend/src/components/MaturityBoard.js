@@ -117,8 +117,8 @@ function MaturityBoard({
           sx={{ 
             p: 3, 
             borderRadius: 3,
-            background: 'rgba(255,255,255,0.95)',
-            backdropFilter: 'blur(10px)'
+            backgroundColor: '#FFFFFF',
+            border: '2px solid #8697C4'
           }}
         >
           {/* Level Headers */}
@@ -126,11 +126,12 @@ function MaturityBoard({
             <Grid item xs={2}>
               <Box 
                 sx={{ 
-                  background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 100%)',
+                  backgroundColor: '#3D52A0',
                   color: 'white',
                   p: 2,
                   borderRadius: 2,
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  fontWeight: 'bold'
                 }}
               >
                 <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '0.9rem' }}>
@@ -139,25 +140,29 @@ function MaturityBoard({
               </Box>
             </Grid>
             {MATURITY_LEVELS.map((level, index) => {
-              // Create gradient for each level using the color palette
-              const gradients = [
-                'linear-gradient(135deg, #3D52A0 0%, #3D52A0 100%)', // Level 0 - Deep blue
-                'linear-gradient(135deg, #3D52A0 0%, #7091E6 100%)', // Level 1 - Blue to light blue
-                'linear-gradient(135deg, #7091E6 0%, #8697C4 100%)', // Level 2 - Light blue to purple
-                'linear-gradient(135deg, #8697C4 0%, #ADBBDA 100%)', // Level 3 - Purple to lavender
-                'linear-gradient(135deg, #ADBBDA 0%, #EDE8F5 100%)', // Level 4 - Lavender to light
+              // Use different solid colors for each level
+              const levelColors = [
+                '#3D52A0', // Level 0 - Deep blue
+                '#7091E6', // Level 1 - Bright blue
+                '#8697C4', // Level 2 - Lavender
+                '#ADBBDA', // Level 3 - Light purple
+                '#EDE8F5', // Level 4 - Very light lavender
               ];
+              
+              const backgroundColor = levelColors[index];
+              const textColor = index >= 3 ? '#3D52A0' : 'white';
               
               return (
                 <Grid item xs={2} key={level}>
                   <Box 
                     sx={{ 
-                      background: gradients[index],
-                      color: index >= 3 ? '#3D52A0' : 'white',
+                      backgroundColor: backgroundColor,
+                      color: textColor,
                       p: 2,
                       borderRadius: 2,
                       textAlign: 'center',
-                      fontWeight: 'bold'
+                      fontWeight: 'bold',
+                      border: index >= 3 ? `2px solid #3D52A0` : 'none'
                     }}
                   >
                     <Typography 
@@ -176,22 +181,35 @@ function MaturityBoard({
           </Grid>
 
           {/* Category Rows */}
-          {MATURITY_CATEGORIES.map((category) => {
+          {MATURITY_CATEGORIES.map((category, categoryIndex) => {
             const categoryCard = getCardForCategory(category);
+            
+            // Use different colors for each category to differentiate them
+            const categoryColors = [
+              '#7091E6', // Data Foundation - Bright blue
+              '#8697C4', // AI Strategy - Lavender  
+              '#ADBBDA', // Talent & Culture - Light purple
+              '#3D52A0', // Technology & Tools - Deep blue
+            ];
+            
+            const categoryColor = categoryColors[categoryIndex] || '#3D52A0';
+            const categoryTextColor = categoryIndex === 2 ? '#3D52A0' : 'white';
+            
             return (
               <Grid container spacing={1} key={category} sx={{ mb: 2 }}>
                 <Grid item xs={2}>
                   <Box 
                     sx={{ 
-                      background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 100%)',
-                      color: 'white',
+                      backgroundColor: categoryColor,
+                      color: categoryTextColor,
                       p: 2, 
                       borderRadius: 2,
                       height: '120px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: '0 4px 12px rgba(61,82,160,0.3)'
+                      boxShadow: `0 3px 8px ${categoryColor}40`,
+                      border: categoryIndex === 2 ? `2px solid #3D52A0` : 'none'
                     }}
                   >
                     <Typography 

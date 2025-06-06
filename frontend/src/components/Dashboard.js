@@ -138,8 +138,8 @@ function Dashboard() {
           p: 3, 
           mb: 4,
           borderRadius: 3,
-          background: 'rgba(255,255,255,0.95)',
-          backdropFilter: 'blur(10px)'
+          backgroundColor: '#FFFFFF',
+          border: '2px solid #ADBBDA'
         }}
       >
         <CompanySelector
@@ -166,8 +166,8 @@ function Dashboard() {
             p: 6, 
             textAlign: 'center',
             borderRadius: 3,
-            background: 'rgba(255,255,255,0.95)',
-            backdropFilter: 'blur(10px)'
+            backgroundColor: '#FFFFFF',
+            border: '2px solid #ADBBDA'
           }}
         >
           <Typography 

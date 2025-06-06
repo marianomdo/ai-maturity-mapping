@@ -9,13 +9,13 @@ function App() {
       <Box
         sx={{
           minHeight: '100vh',
-          background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 25%, #8697C4 50%, #ADBBDA 75%, #EDE8F5 100%)',
+          backgroundColor: '#EDE8F5', // Light lavender background
         }}
       >
         {/* Header Section */}
         <Box
           sx={{
-            background: 'linear-gradient(135deg, #3D52A0 0%, #7091E6 50%, #8697C4 100%)',
+            backgroundColor: '#3D52A0', // Solid deep blue
             py: 4,
             px: 3,
             position: 'relative',
@@ -42,7 +42,7 @@ function App() {
               variant="h4" 
               component="h2" 
               sx={{ 
-                color: 'rgba(255,255,255,0.9)',
+                color: '#ADBBDA', // Light purple accent
                 fontWeight: 300,
                 letterSpacing: '0.05em',
                 textAlign: 'center',
