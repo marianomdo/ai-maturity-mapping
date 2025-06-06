@@ -53,6 +53,21 @@ const createTables = async (client) => {
       )
     `);
 
+    // Clean up duplicate cards (keep the most recent one per company/category)
+    try {
+      await client.query(`
+        DELETE FROM ai_cards 
+        WHERE id NOT IN (
+          SELECT DISTINCT ON (company_id, category_name) id
+          FROM ai_cards 
+          ORDER BY company_id, category_name, updated_at DESC
+        )
+      `);
+      console.log('Cleaned up duplicate cards');
+    } catch (error) {
+      console.log('Error cleaning up duplicate cards:', error.message);
+    }
+
     // Add unique constraint if it doesn't exist (for existing databases)
     try {
       await client.query(`

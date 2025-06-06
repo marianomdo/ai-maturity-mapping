@@ -72,7 +72,7 @@ function MaturityBoard({
     try {
       // Parse destination to get category and level
       const [destCategory, destLevel] = destination.droppableId.split('||');
-      const [sourceCategory, sourceLevel] = source.droppableId.split('||');
+      const [sourceCategory] = source.droppableId.split('||');
       
       // Only allow moves within the same category (horizontal movement between levels)
       if (destCategory !== sourceCategory) {
