@@ -2,15 +2,23 @@
   "name": "ai-maturity-mapping",
   "version": "1.0.0",
   "description": "A web application for mapping and visualizing AI maturity of companies using a Trello-like board interface",
+  "main": "backend/server.js",
   "scripts": {
+    "start": "cd backend && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && npm run dev",
     "client": "cd frontend && npm run dev",
+    "build": "cd frontend && npm install && npm run build",
+    "heroku-postbuild": "npm run build",
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
   },
   "keywords": ["ai", "maturity", "assessment", "trello", "board"],
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
