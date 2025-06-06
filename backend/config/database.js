@@ -48,9 +48,25 @@ const createTables = async (client) => {
         next_steps_recommendations TEXT,
         relevant_link VARCHAR(500),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(company_id, category_name)
       )
     `);
+
+    // Add unique constraint if it doesn't exist (for existing databases)
+    try {
+      await client.query(`
+        ALTER TABLE ai_cards 
+        ADD CONSTRAINT ai_cards_company_category_unique 
+        UNIQUE (company_id, category_name)
+      `);
+      console.log('Added unique constraint for company_id and category_name');
+    } catch (error) {
+      // Constraint already exists or other error - ignore
+      if (!error.message.includes('already exists')) {
+        console.log('Unique constraint already exists or could not be added:', error.message);
+      }
+    }
 
     console.log('Database tables created successfully');
   } catch (error) {

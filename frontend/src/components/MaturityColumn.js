@@ -17,7 +17,7 @@ import { Add } from '@mui/icons-material';
 import AICard from './AICard';
 import { LEVEL_COLORS } from '../constants/maturityData';
 
-function MaturityColumn({ category, level, cards, onCardCreate, onCardClick }) {
+function MaturityColumn({ category, level, card, onCardCreate, onCardClick, isEmpty, isCurrentLevel }) {
   const [addCardDialogOpen, setAddCardDialogOpen] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState('');
   const [creating, setCreating] = useState(false);
@@ -60,25 +60,27 @@ function MaturityColumn({ category, level, cards, onCardCreate, onCardClick }) {
       <Paper 
         elevation={2} 
         sx={{ 
-          height: '200px',
+          height: '120px',
           p: 1,
-          bgcolor: levelColor + '20', // 20% opacity
-          border: `2px solid ${levelColor}`,
+          bgcolor: isCurrentLevel ? levelColor + '40' : (levelColor + '10'), // Stronger color if current level
+          border: isCurrentLevel ? `3px solid ${levelColor}` : `1px solid ${levelColor}`,
           position: 'relative'
         }}
       >
-        {/* Add Card Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-          <Tooltip title="Add Card">
-            <IconButton 
-              size="small" 
-              onClick={() => setAddCardDialogOpen(true)}
-              sx={{ bgcolor: 'white', '&:hover': { bgcolor: 'grey.100' } }}
-            >
-              <Add fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        {/* Add Card Button - only show if this category has no card yet */}
+        {isEmpty && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <Tooltip title={`Add ${category} Card`}>
+              <IconButton 
+                size="large" 
+                onClick={() => setAddCardDialogOpen(true)}
+                sx={{ bgcolor: 'white', '&:hover': { bgcolor: 'grey.100' } }}
+              >
+                <Add />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
 
         {/* Droppable Area */}
         <Droppable droppableId={droppableId}>
@@ -87,20 +89,21 @@ function MaturityColumn({ category, level, cards, onCardCreate, onCardClick }) {
               ref={provided.innerRef}
               {...provided.droppableProps}
               sx={{
-                minHeight: '150px',
-                bgcolor: snapshot.isDraggingOver ? levelColor + '30' : 'transparent',
+                minHeight: isEmpty ? '0px' : '100px',
+                bgcolor: snapshot.isDraggingOver ? levelColor + '50' : 'transparent',
                 borderRadius: 1,
-                p: 0.5
+                p: 0.5,
+                display: isEmpty ? 'none' : 'block'
               }}
             >
-              {cards.map((card, index) => (
+              {card && (
                 <AICard
                   key={card.id}
                   card={card}
-                  index={index}
+                  index={0}
                   onClick={() => onCardClick(card)}
                 />
-              ))}
+              )}
               {provided.placeholder}
             </Box>
           )}

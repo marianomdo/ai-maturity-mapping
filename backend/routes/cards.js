@@ -116,13 +116,33 @@ router.post('/', [
       relevantLink = ''
     } = req.body;
 
-    const result = await pool.query(`
-      INSERT INTO ai_cards (
-        company_id, category_name, level_name, title, description, 
-        current_score_justification, next_steps_recommendations, relevant_link
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-      RETURNING *
-    `, [companyId, categoryName, levelName, title, description, currentScoreJustification, nextStepsRecommendations, relevantLink]);
+    // Check if a card already exists for this company and category
+    const existingCard = await pool.query(`
+      SELECT id FROM ai_cards 
+      WHERE company_id = $1 AND category_name = $2
+    `, [companyId, categoryName]);
+
+    let result;
+    if (existingCard.rows.length > 0) {
+      // Update existing card
+      result = await pool.query(`
+        UPDATE ai_cards 
+        SET level_name = $1, title = $2, description = $3, 
+            current_score_justification = $4, next_steps_recommendations = $5, 
+            relevant_link = $6, updated_at = CURRENT_TIMESTAMP
+        WHERE company_id = $7 AND category_name = $8
+        RETURNING *
+      `, [levelName, title, description, currentScoreJustification, nextStepsRecommendations, relevantLink, companyId, categoryName]);
+    } else {
+      // Create new card
+      result = await pool.query(`
+        INSERT INTO ai_cards (
+          company_id, category_name, level_name, title, description, 
+          current_score_justification, next_steps_recommendations, relevant_link
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+        RETURNING *
+      `, [companyId, categoryName, levelName, title, description, currentScoreJustification, nextStepsRecommendations, relevantLink]);
+    }
 
     // Get the card with company name
     const cardWithCompany = await pool.query(`
