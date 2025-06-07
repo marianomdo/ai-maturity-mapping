@@ -71,8 +71,8 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
       <Paper 
         elevation={isCurrentLevel ? 4 : 0} 
         sx={{ 
-          height: { xs: '80px', md: '120px' },
-          p: { xs: 0.5, md: 1 },
+          height: { xs: '60px', md: '120px' },
+          p: { xs: 0.25, md: 1 },
           backgroundColor: isCurrentLevel 
             ? getLevelColor(level) 
             : `${getLevelColor(level)}20`, // 20% opacity for empty slots
@@ -99,12 +99,12 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
               {...provided.droppableProps}
               sx={{
                 height: '100%',
-                minHeight: { xs: '70px', md: '100px' },
+                minHeight: { xs: '55px', md: '100px' },
                 backgroundColor: snapshot.isDraggingOver 
                   ? `${getLevelColor(level)}60` 
                   : 'transparent',
                 borderRadius: 1,
-                p: { xs: 0.25, md: 0.5 },
+                p: { xs: 0.1, md: 0.5 },
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -131,15 +131,15 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
               {showAddButton && !card && (
                 <Tooltip title={`Add ${category} Card`}>
                   <IconButton 
-                    size={window.innerWidth < 600 ? "small" : "large"}
+                    size="small"
                     onClick={() => setAddCardDialogOpen(true)}
                     sx={{ 
                       backgroundColor: '#FFFFFF',
                       color: '#3D52A0',
                       border: `2px solid #3D52A0`,
                       boxShadow: '0 2px 8px rgba(61,82,160,0.2)',
-                      width: { xs: '32px', md: '48px' },
-                      height: { xs: '32px', md: '48px' },
+                      width: { xs: '24px', md: '48px' },
+                      height: { xs: '24px', md: '48px' },
                       '&:hover': { 
                         backgroundColor: '#3D52A0',
                         color: '#FFFFFF',
@@ -148,7 +148,7 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
                       } 
                     }}
                   >
-                    <Add sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} />
+                    <Add sx={{ fontSize: { xs: '0.8rem', md: '1.5rem' } }} />
                   </IconButton>
                 </Tooltip>
               )}
