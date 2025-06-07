@@ -54,14 +54,14 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
     setError(null);
   };
 
-  // Define solid colors for each level using the palette
+  // Define solid colors for each level using blue progression
   const getLevelColor = (level) => {
     const colors = {
       'Level 0: Nascent': '#3D52A0',      // Deep blue
-      'Level 1: Awareness': '#7091E6',    // Bright blue  
-      'Level 2: Developing': '#8697C4',   // Lavender
-      'Level 3: Defined': '#ADBBDA',      // Light purple
-      'Level 4: Optimized': '#EDE8F5'     // Very light lavender
+      'Level 1: Awareness': '#4A5FA8',    // Medium-deep blue
+      'Level 2: Developing': '#7091E6',   // Bright blue
+      'Level 3: Defined': '#8697C4',      // Lavender blue
+      'Level 4: Optimized': '#ADBBDA'     // Light purple-blue
     };
     return colors[level] || '#3D52A0';
   };
@@ -71,8 +71,8 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
       <Paper 
         elevation={isCurrentLevel ? 4 : 0} 
         sx={{ 
-          height: '120px',
-          p: 1,
+          height: { xs: '80px', md: '120px' },
+          p: { xs: 0.5, md: 1 },
           backgroundColor: isCurrentLevel 
             ? getLevelColor(level) 
             : `${getLevelColor(level)}20`, // 20% opacity for empty slots
@@ -99,12 +99,12 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
               {...provided.droppableProps}
               sx={{
                 height: '100%',
-                minHeight: '100px',
+                minHeight: { xs: '70px', md: '100px' },
                 backgroundColor: snapshot.isDraggingOver 
                   ? `${getLevelColor(level)}60` 
                   : 'transparent',
                 borderRadius: 1,
-                p: 0.5,
+                p: { xs: 0.25, md: 0.5 },
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -131,13 +131,15 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
               {showAddButton && !card && (
                 <Tooltip title={`Add ${category} Card`}>
                   <IconButton 
-                    size="large" 
+                    size={window.innerWidth < 600 ? "small" : "large"}
                     onClick={() => setAddCardDialogOpen(true)}
                     sx={{ 
                       backgroundColor: '#FFFFFF',
                       color: '#3D52A0',
                       border: `2px solid #3D52A0`,
                       boxShadow: '0 2px 8px rgba(61,82,160,0.2)',
+                      width: { xs: '32px', md: '48px' },
+                      height: { xs: '32px', md: '48px' },
                       '&:hover': { 
                         backgroundColor: '#3D52A0',
                         color: '#FFFFFF',
@@ -146,7 +148,7 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
                       } 
                     }}
                   >
-                    <Add />
+                    <Add sx={{ fontSize: { xs: '1rem', md: '1.5rem' } }} />
                   </IconButton>
                 </Tooltip>
               )}

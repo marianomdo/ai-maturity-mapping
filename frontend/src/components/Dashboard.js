@@ -135,8 +135,8 @@ function Dashboard() {
       <Paper 
         elevation={8} 
         sx={{ 
-          p: 3, 
-          mb: 4,
+          p: { xs: 2, md: 3 }, 
+          mb: { xs: 3, md: 4 },
           borderRadius: 3,
           backgroundColor: '#FFFFFF',
           border: '2px solid #ADBBDA'
@@ -163,7 +163,7 @@ function Dashboard() {
         <Paper 
           elevation={8} 
           sx={{ 
-            p: 6, 
+            p: { xs: 4, md: 6 }, 
             textAlign: 'center',
             borderRadius: 3,
             backgroundColor: '#FFFFFF',
@@ -175,14 +175,18 @@ function Dashboard() {
             sx={{ 
               color: '#3D52A0',
               fontWeight: 'bold',
-              mb: 2
+              mb: 2,
+              fontSize: { xs: '1.2rem', md: '1.5rem' }
             }}
           >
             Get Started
           </Typography>
           <Typography 
             variant="body1" 
-            sx={{ color: '#7091E6' }}
+            sx={{ 
+              color: '#7091E6',
+              fontSize: { xs: '0.9rem', md: '1rem' }
+            }}
           >
             Please create or select a company to view its AI maturity board
           </Typography>

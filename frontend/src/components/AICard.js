@@ -28,7 +28,7 @@ function AICard({ card, index, onClick }) {
           sx={{
             width: '100%',
             height: 'fit-content',
-            maxHeight: '110px',
+            maxHeight: { xs: '70px', md: '110px' },
             cursor: snapshot.isDragging ? 'grabbing' : 'grab',
             backgroundColor: snapshot.isDragging ? '#EDE8F5' : '#FFFFFF',
             border: `2px solid ${snapshot.isDragging ? '#3D52A0' : '#ADBBDA'}`,
@@ -53,15 +53,15 @@ function AICard({ card, index, onClick }) {
           }}
         >
           <CardContent sx={{ 
-            p: 1, 
-            '&:last-child': { pb: 1 },
+            p: { xs: 0.5, md: 1 }, 
+            '&:last-child': { pb: { xs: 0.5, md: 1 } },
             height: '100%',
             display: 'flex',
             flexDirection: 'column'
           }}>
             <Box display="flex" alignItems="center" gap={0.5} mb={0.5}>
               <Box sx={{ color: '#3D52A0', flexShrink: 0 }}>
-                <DragIndicator fontSize="small" />
+                <DragIndicator sx={{ fontSize: { xs: '0.9rem', md: '1.2rem' } }} />
               </Box>
               <Typography 
                 variant="body2" 
@@ -69,12 +69,12 @@ function AICard({ card, index, onClick }) {
                   flexGrow: 1,
                   fontWeight: 'bold',
                   color: '#3D52A0',
-                  fontSize: '0.875rem',
+                  fontSize: { xs: '0.7rem', md: '0.875rem' },
                   lineHeight: 1.2,
                   wordBreak: 'break-word',
                   overflow: 'hidden',
                   display: '-webkit-box',
-                  WebkitLineClamp: 2,
+                  WebkitLineClamp: { xs: 1, md: 2 },
                   WebkitBoxOrient: 'vertical'
                 }}
               >
@@ -88,7 +88,7 @@ function AICard({ card, index, onClick }) {
                   variant="caption" 
                   sx={{
                     color: '#7091E6',
-                    fontSize: '0.75rem',
+                    fontSize: { xs: '0.65rem', md: '0.75rem' },
                     lineHeight: 1.2,
                     wordBreak: 'break-word',
                     display: 'block'
@@ -108,11 +108,11 @@ function AICard({ card, index, onClick }) {
                       minWidth: 'auto',
                       p: 0,
                       color: '#8697C4',
-                      fontSize: '0.7rem',
+                      fontSize: { xs: '0.6rem', md: '0.7rem' },
                       textTransform: 'none',
                       mt: 0.25
                     }}
-                    endIcon={expanded ? <ExpandLess sx={{ fontSize: '0.8rem' }} /> : <ExpandMore sx={{ fontSize: '0.8rem' }} />}
+                    endIcon={expanded ? <ExpandLess sx={{ fontSize: { xs: '0.7rem', md: '0.8rem' } }} /> : <ExpandMore sx={{ fontSize: { xs: '0.7rem', md: '0.8rem' } }} />}
                   >
                     {expanded ? 'Less' : 'More'}
                   </Button>

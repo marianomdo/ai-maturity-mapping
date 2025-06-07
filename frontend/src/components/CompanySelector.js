@@ -56,14 +56,15 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
           color: '#3D52A0',
           fontWeight: 'bold',
           letterSpacing: '0.05em',
-          mb: 3
+          mb: 3,
+          fontSize: { xs: '1.2rem', md: '1.5rem' }
         }}
       >
         Company Selection
       </Typography>
       
-      <Box display="flex" gap={3} alignItems="center" flexWrap="wrap">
-        <FormControl sx={{ minWidth: 300 }}>
+      <Box display="flex" gap={3} alignItems="center" flexWrap="wrap" sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+        <FormControl sx={{ minWidth: { xs: '100%', sm: 300 } }}>
           <InputLabel sx={{ color: '#7091E6' }}>Select Company</InputLabel>
           <Select
             value={selectedCompany?.id || ''}
@@ -101,8 +102,9 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
             color: 'white',
             boxShadow: '0 4px 12px rgba(112,145,230,0.4)',
             borderRadius: 2,
-            px: 3,
+            px: { xs: 2, md: 3 },
             py: 1,
+            minWidth: { xs: '100%', sm: 'auto' },
             '&:hover': {
               backgroundColor: '#3D52A0',
               boxShadow: '0 6px 16px rgba(61,82,160,0.5)',
@@ -123,7 +125,8 @@ function CompanySelector({ companies, selectedCompany, onCompanySelect, onCompan
             backgroundColor: '#EDE8F5',
             borderRadius: 2,
             color: '#3D52A0',
-            border: '2px solid #ADBBDA'
+            border: '2px solid #ADBBDA',
+            fontSize: { xs: '0.9rem', md: '1rem' }
           }}
         >
           Currently viewing AI maturity board for: <strong>{selectedCompany.name}</strong>

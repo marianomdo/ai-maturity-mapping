@@ -16,8 +16,8 @@ function App() {
         <Box
           sx={{
             backgroundColor: '#3D52A0', // Solid deep blue
-            py: 4,
-            px: 3,
+            py: { xs: 2, md: 4 },
+            px: { xs: 2, md: 3 },
             position: 'relative',
             overflow: 'hidden'
           }}
@@ -31,9 +31,9 @@ function App() {
                 fontWeight: 'bold',
                 letterSpacing: '0.1em',
                 textAlign: 'center',
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.5rem' },
                 textShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                mb: 1
+                mb: { xs: 0.5, md: 1 }
               }}
             >
               AI MATURITY
@@ -46,7 +46,7 @@ function App() {
                 fontWeight: 300,
                 letterSpacing: '0.05em',
                 textAlign: 'center',
-                fontSize: { xs: '1.5rem', md: '2rem' }
+                fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' }
               }}
             >
               MAPPING
@@ -55,7 +55,7 @@ function App() {
         </Box>
 
         {/* Main Content */}
-        <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Container maxWidth="xl" sx={{ py: { xs: 2, md: 4 }, px: { xs: 1, md: 3 } }}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
           </Routes>
