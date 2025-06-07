@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import {
   Box,
   Typography,
   Paper,
   Grid,
-  Alert
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton
 } from '@mui/material';
 import MaturityColumn from './MaturityColumn';
 import CardDetailsModal from './CardDetailsModal';
 import { MATURITY_CATEGORIES, MATURITY_LEVELS } from '../constants/maturityData';
+import { Close } from '@mui/icons-material';
 
 function MaturityBoard({ 
   company, 
@@ -22,6 +27,7 @@ function MaturityBoard({
   const [selectedCard, setSelectedCard] = useState(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [levelDescriptionDialog, setLevelDescriptionDialog] = useState(null);
 
   // Get the single card for each category
   const getCardForCategory = (category) => {
@@ -50,6 +56,12 @@ function MaturityBoard({
       setSelectedCard(null);
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const handleLevelClick = (level, levelDescription) => {
+    if (window.innerWidth < 768) { // Only on mobile
+      setLevelDescriptionDialog({ level, description: levelDescription });
     }
   };
 
@@ -88,6 +100,10 @@ function MaturityBoard({
       setError(err.message);
     }
   };
+
+  if (!company) {
+    return null;
+  }
 
   return (
     <Box>
@@ -141,17 +157,18 @@ function MaturityBoard({
               </Box>
             </Grid>
             {MATURITY_LEVELS.map((level, index) => {
-              // Use blue progression for levels
+              // Use lighter blue progression for better contrast
               const levelColors = [
-                '#3D52A0', // Level 0 - Deep blue
-                '#4A5FA8', // Level 1 - Medium-deep blue
-                '#7091E6', // Level 2 - Bright blue
-                '#8697C4', // Level 3 - Lavender blue
-                '#ADBBDA', // Level 4 - Light purple-blue
+                '#6B7FD7', // Level 0 - Lighter blue (was #3D52A0)
+                '#7B8FE0', // Level 1 - Lighter medium blue (was #4A5FA8)
+                '#8BA4EA', // Level 2 - Light blue (was #7091E6)
+                '#B5C4E8', // Level 3 - Very light blue (was #8697C4)
+                '#D5E0F5', // Level 4 - Very light purple-blue (was #ADBBDA)
               ];
               
               const backgroundColor = levelColors[index];
-              const textColor = index >= 3 ? '#3D52A0' : 'white';
+              // Use dark text for better contrast on all lighter backgrounds
+              const textColor = index >= 3 ? '#2C3E50' : '#FFFFFF';
               
               // Split level into number and description
               const levelMatch = level.match(/^(Level \d+):\s*(.+)$/);
@@ -165,6 +182,7 @@ function MaturityBoard({
               return (
                 <Grid item xs={2.4} md={2} key={level}>
                   <Box 
+                    onClick={() => handleLevelClick(levelNumber, levelDescription)}
                     sx={{ 
                       backgroundColor: backgroundColor,
                       color: textColor,
@@ -172,12 +190,17 @@ function MaturityBoard({
                       borderRadius: 2,
                       textAlign: 'center',
                       fontWeight: 'bold',
-                      border: index >= 3 ? `2px solid #3D52A0` : 'none',
+                      border: `2px solid #5A6FCC`,
                       minHeight: { xs: '35px', md: 'auto' },
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      cursor: { xs: 'pointer', md: 'default' },
+                      '&:hover': {
+                        backgroundColor: { xs: '#E3EAFF', md: backgroundColor },
+                        transition: 'background-color 0.2s ease'
+                      }
                     }}
                   >
                     {/* Level Number */}
@@ -185,14 +208,14 @@ function MaturityBoard({
                       variant="subtitle1" 
                       sx={{ 
                         fontWeight: 'bold',
-                        fontSize: { xs: '0.6rem', md: '0.9rem' },
+                        fontSize: { xs: '0.65rem', md: '0.9rem' },
                         lineHeight: 1
                       }}
                     >
                       {levelNumber}
                     </Typography>
                     
-                    {/* Level Description */}
+                    {/* Level Description - Hidden on mobile */}
                     <Typography 
                       variant="caption" 
                       sx={{ 
@@ -200,10 +223,10 @@ function MaturityBoard({
                         fontSize: { xs: '0.45rem', md: '0.7rem' },
                         lineHeight: 1,
                         mt: { xs: 0.1, md: 0.2 },
-                        display: { xs: 'block', md: 'block' }
+                        display: { xs: 'none', md: 'block' } // Hide on mobile
                       }}
                     >
-                      {window.innerWidth < 768 ? truncatedDescription : levelDescription}
+                      {levelDescription}
                     </Typography>
                   </Box>
                 </Grid>
@@ -290,6 +313,42 @@ function MaturityBoard({
           onDelete={handleCardDetailsDelete}
         />
       )}
+
+      {/* Mobile Level Description Dialog */}
+      <Dialog
+        open={!!levelDescriptionDialog}
+        onClose={() => setLevelDescriptionDialog(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle sx={{ 
+          backgroundColor: '#6B7FD7', 
+          color: 'white', 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center' 
+        }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            {levelDescriptionDialog?.level}
+          </Typography>
+          <IconButton 
+            onClick={() => setLevelDescriptionDialog(null)}
+            sx={{ color: 'white' }}
+          >
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ p: 3, backgroundColor: '#F8F9FF' }}>
+          <Typography variant="body1" sx={{ 
+            color: '#2C3E50', 
+            fontSize: '1.1rem',
+            fontWeight: '500',
+            textAlign: 'center'
+          }}>
+            {levelDescriptionDialog?.description}
+          </Typography>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }
