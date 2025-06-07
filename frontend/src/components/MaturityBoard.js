@@ -153,29 +153,57 @@ function MaturityBoard({
               const backgroundColor = levelColors[index];
               const textColor = index >= 3 ? '#3D52A0' : 'white';
               
+              // Split level into number and description
+              const levelMatch = level.match(/^(Level \d+):\s*(.+)$/);
+              const levelNumber = levelMatch ? levelMatch[1].replace('Level ', 'L') : `L${index}`;
+              const levelDescription = levelMatch ? levelMatch[2] : level;
+              
+              // Truncate description for mobile if too long
+              const truncatedDescription = levelDescription.length > 8 ? 
+                levelDescription.substring(0, 8) + '...' : levelDescription;
+              
               return (
                 <Grid item xs={2.4} md={2} key={level}>
                   <Box 
                     sx={{ 
                       backgroundColor: backgroundColor,
                       color: textColor,
-                      p: { xs: 0.5, md: 2 },
+                      p: { xs: 0.25, md: 2 },
                       borderRadius: 2,
                       textAlign: 'center',
                       fontWeight: 'bold',
                       border: index >= 3 ? `2px solid #3D52A0` : 'none',
-                      minHeight: { xs: '35px', md: 'auto' }
+                      minHeight: { xs: '35px', md: 'auto' },
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center'
                     }}
                   >
+                    {/* Level Number */}
                     <Typography 
                       variant="subtitle1" 
                       sx={{ 
                         fontWeight: 'bold',
                         fontSize: { xs: '0.6rem', md: '0.9rem' },
-                        lineHeight: 1.1
+                        lineHeight: 1
                       }}
                     >
-                      {level.replace('Level ', 'L').replace(':', '')} {/* Shorten for mobile */}
+                      {levelNumber}
+                    </Typography>
+                    
+                    {/* Level Description */}
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        fontWeight: 'normal',
+                        fontSize: { xs: '0.45rem', md: '0.7rem' },
+                        lineHeight: 1,
+                        mt: { xs: 0.1, md: 0.2 },
+                        display: { xs: 'block', md: 'block' }
+                      }}
+                    >
+                      {window.innerWidth < 768 ? truncatedDescription : levelDescription}
                     </Typography>
                   </Box>
                 </Grid>
