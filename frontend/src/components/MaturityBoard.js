@@ -240,14 +240,14 @@ function MaturityBoard({
             
             // Use light gray tones for categories
             const categoryColors = [
-              '#E8E8E8', // Data Foundation - Light gray
-              '#D4D4D4', // AI Strategy - Medium gray  
-              '#C0C0C0', // Talent & Culture - Darker gray
-              '#B0B0B0', // Technology & Tools - Dark gray
+              '#F7F4FB', // Data Foundation - Very light lavender
+              '#EDE8F5', // AI Strategy - Light lavender
+              '#E3DCEF', // Talent & Culture - Medium light lavender
+              '#D9D0E9', // Technology & Tools - Medium lavender
             ];
             
-            const categoryColor = categoryColors[categoryIndex] || '#E8E8E8';
-            const categoryTextColor = '#333333'; // Dark text for all gray backgrounds
+            const categoryColor = categoryColors[categoryIndex] || '#F7F4FB';
+            const categoryTextColor = '#3D52A0'; // Deep blue for better contrast
             
             return (
               <Grid container spacing={1} key={category} sx={{ mb: 1 }}>
@@ -262,8 +262,13 @@ function MaturityBoard({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: `0 2px 4px ${categoryColor}80`,
-                      border: `2px solid #999999`
+                      boxShadow: `0 2px 4px ${categoryColor}60`,
+                      border: `2px solid #ADBBDA40`,
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        backgroundColor: `${categoryColor}E0`,
+                        boxShadow: `0 2px 6px ${categoryColor}80`,
+                      }
                     }}
                   >
                     <Typography 

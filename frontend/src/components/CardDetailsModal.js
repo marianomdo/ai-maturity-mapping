@@ -100,14 +100,19 @@ function CardDetailsModal({ open, card, onClose, onUpdate, onDelete }) {
           <Chip 
             label={card.categoryName} 
             color="primary" 
-            variant="outlined"
+            sx={{ 
+              bgcolor: '#EDE8F520',
+              color: '#3D52A0',
+              border: '1px solid #ADBBDA',
+              fontWeight: 'medium'
+            }}
           />
           <Chip 
             label={card.levelName}
             sx={{ 
-              bgcolor: levelColor + '20',
+              bgcolor: levelColor + '15',
               color: '#1565c0',
-              border: `1px solid ${levelColor}60`,
+              border: `1px solid ${levelColor}40`,
               fontWeight: 'medium'
             }}
           />

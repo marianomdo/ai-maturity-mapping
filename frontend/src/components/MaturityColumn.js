@@ -75,18 +75,18 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
           p: { xs: 0.25, md: 1 },
           backgroundColor: isCurrentLevel 
             ? getLevelColor(level) 
-            : `${getLevelColor(level)}30`, // 30% opacity for empty slots
+            : `${getLevelColor(level)}20`, // 20% opacity for empty slots
           border: isCurrentLevel 
-            ? `2px solid ${getLevelColor(level)}80` 
-            : `1px solid ${getLevelColor(level)}40`,
+            ? `2px solid ${getLevelColor(level)}60` 
+            : `1px solid ${getLevelColor(level)}30`,
           borderRadius: 2,
           position: 'relative',
           boxShadow: isCurrentLevel 
-            ? `0 2px 8px ${getLevelColor(level)}40` 
+            ? `0 2px 8px ${getLevelColor(level)}30` 
             : 'none',
           '&:hover': !isCurrentLevel ? {
-            backgroundColor: `${getLevelColor(level)}40`,
-            borderColor: `${getLevelColor(level)}60`,
+            backgroundColor: `${getLevelColor(level)}30`,
+            borderColor: `${getLevelColor(level)}40`,
             transition: 'all 0.2s ease'
           } : {}
         }}
@@ -101,7 +101,7 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
                 height: '100%',
                 minHeight: { xs: '55px', md: '100px' },
                 backgroundColor: snapshot.isDraggingOver 
-                  ? `${getLevelColor(level)}60` 
+                  ? `${getLevelColor(level)}40` 
                   : 'transparent',
                 borderRadius: 1,
                 p: { xs: 0.1, md: 0.5 },
@@ -110,7 +110,7 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
                 justifyContent: 'center',
                 alignItems: 'center',
                 border: snapshot.isDraggingOver 
-                  ? `3px dashed ${getLevelColor(level)}` 
+                  ? `2px dashed ${getLevelColor(level)}80` 
                   : 'none',
                 transition: 'all 0.2s ease',
                 overflow: 'hidden' // Ensure cards don't overflow
