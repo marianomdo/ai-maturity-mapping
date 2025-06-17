@@ -14,9 +14,9 @@ export const MATURITY_LEVELS = [
 ];
 
 export const LEVEL_COLORS = {
-  'Level 0: Nascent': '#f44336',      // Red
-  'Level 1: Foundational': '#ff9800', // Orange
-  'Level 2: Developing': '#ffeb3b',    // Yellow
-  'Level 3: Operationalized': '#8bc34a', // Light Green
-  'Level 4: Optimized': '#4caf50'     // Green
+  'Level 0: Nascent': '#f5f9ff',      // Very light blue-white
+  'Level 1: Foundational': '#e3f2fd', // Light blue
+  'Level 2: Developing': '#bbdefb',    // Slightly darker light blue
+  'Level 3: Operationalized': '#90caf9', // Medium light blue
+  'Level 4: Optimized': '#64b5f6'     // Medium blue
 }; 

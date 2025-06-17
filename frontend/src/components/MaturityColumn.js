@@ -54,38 +54,38 @@ function MaturityColumn({ category, level, card, onCardCreate, onCardClick, show
     setError(null);
   };
 
-  // Define solid colors for each level using blue progression
+  // Define solid colors for each level using lighter blue progression
   const getLevelColor = (level) => {
     const colors = {
-      'Level 0: Nascent': '#3D52A0',      // Deep blue
-      'Level 1: Awareness': '#4A5FA8',    // Medium-deep blue
-      'Level 2: Developing': '#7091E6',   // Bright blue
-      'Level 3: Defined': '#8697C4',      // Lavender blue
-      'Level 4: Optimized': '#ADBBDA'     // Light purple-blue
+      'Level 0: Nascent': '#f5f9ff',      // Very light blue-white
+      'Level 1: Foundational': '#e3f2fd', // Light blue
+      'Level 2: Developing': '#bbdefb',   // Slightly darker light blue
+      'Level 3: Operationalized': '#90caf9', // Medium light blue
+      'Level 4: Optimized': '#64b5f6'     // Medium blue
     };
-    return colors[level] || '#3D52A0';
+    return colors[level] || '#f5f9ff';
   };
 
   return (
     <>
       <Paper 
-        elevation={isCurrentLevel ? 4 : 0} 
+        elevation={isCurrentLevel ? 2 : 0} 
         sx={{ 
           height: { xs: '60px', md: '120px' },
           p: { xs: 0.25, md: 1 },
           backgroundColor: isCurrentLevel 
             ? getLevelColor(level) 
-            : `${getLevelColor(level)}20`, // 20% opacity for empty slots
+            : `${getLevelColor(level)}30`, // 30% opacity for empty slots
           border: isCurrentLevel 
-            ? `3px solid ${getLevelColor(level)}` 
+            ? `2px solid ${getLevelColor(level)}80` 
             : `1px solid ${getLevelColor(level)}40`,
           borderRadius: 2,
           position: 'relative',
           boxShadow: isCurrentLevel 
-            ? `0 4px 12px ${getLevelColor(level)}40` 
+            ? `0 2px 8px ${getLevelColor(level)}40` 
             : 'none',
           '&:hover': !isCurrentLevel ? {
-            backgroundColor: `${getLevelColor(level)}30`,
+            backgroundColor: `${getLevelColor(level)}40`,
             borderColor: `${getLevelColor(level)}60`,
             transition: 'all 0.2s ease'
           } : {}

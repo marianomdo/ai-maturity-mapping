@@ -106,8 +106,9 @@ function CardDetailsModal({ open, card, onClose, onUpdate, onDelete }) {
             label={card.levelName}
             sx={{ 
               bgcolor: levelColor + '20',
-              color: levelColor,
-              border: `1px solid ${levelColor}`
+              color: '#1565c0',
+              border: `1px solid ${levelColor}60`,
+              fontWeight: 'medium'
             }}
           />
         </Box>

@@ -157,18 +157,18 @@ function MaturityBoard({
               </Box>
             </Grid>
             {MATURITY_LEVELS.map((level, index) => {
-              // Use lighter blue progression for better contrast
+              // Use lighter blue progression
               const levelColors = [
-                '#6B7FD7', // Level 0 - Lighter blue (was #3D52A0)
-                '#7B8FE0', // Level 1 - Lighter medium blue (was #4A5FA8)
-                '#8BA4EA', // Level 2 - Light blue (was #7091E6)
-                '#B5C4E8', // Level 3 - Very light blue (was #8697C4)
-                '#D5E0F5', // Level 4 - Very light purple-blue (was #ADBBDA)
+                '#f5f9ff', // Level 0 - Very light blue-white
+                '#e3f2fd', // Level 1 - Light blue
+                '#bbdefb', // Level 2 - Slightly darker light blue
+                '#90caf9', // Level 3 - Medium light blue
+                '#64b5f6', // Level 4 - Medium blue
               ];
               
               const backgroundColor = levelColors[index];
-              // Use dark text for better contrast on all lighter backgrounds
-              const textColor = index >= 3 ? '#2C3E50' : '#FFFFFF';
+              // Use consistent dark blue text for better readability on light backgrounds
+              const textColor = '#1565c0';
               
               // Split level into number and description
               const levelMatch = level.match(/^(Level \d+):\s*(.+)$/);
@@ -190,7 +190,7 @@ function MaturityBoard({
                       borderRadius: 2,
                       textAlign: 'center',
                       fontWeight: 'bold',
-                      border: `2px solid #5A6FCC`,
+                      border: `1px solid ${levelColors[4]}30`,
                       minHeight: { xs: '35px', md: 'auto' },
                       display: 'flex',
                       flexDirection: 'column',
@@ -198,7 +198,7 @@ function MaturityBoard({
                       alignItems: 'center',
                       cursor: { xs: 'pointer', md: 'default' },
                       '&:hover': {
-                        backgroundColor: { xs: '#E3EAFF', md: backgroundColor },
+                        backgroundColor: { xs: `${levelColors[2]}50`, md: backgroundColor },
                         transition: 'background-color 0.2s ease'
                       }
                     }}
