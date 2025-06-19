@@ -15,7 +15,7 @@ function App() {
         {/* Header Section */}
         <Box
           sx={{
-            backgroundColor: '#3D52A0', // Solid deep blue
+            backgroundColor: '#7091E6', // Changed from #3D52A0 to match ADD COMPANY button
             py: { xs: 2, md: 4 },
             px: { xs: 2, md: 3 },
             position: 'relative',
@@ -32,7 +32,7 @@ function App() {
                 letterSpacing: '0.1em',
                 textAlign: 'center',
                 fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3.5rem' },
-                textShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                textShadow: '0 2px 4px rgba(61,82,160,0.3)',
                 mb: { xs: 0.5, md: 1 }
               }}
             >
@@ -42,7 +42,7 @@ function App() {
               variant="h4" 
               component="h2" 
               sx={{ 
-                color: '#ADBBDA', // Light purple accent
+                color: '#EDE8F5', // Lighter color for better contrast
                 fontWeight: 300,
                 letterSpacing: '0.05em',
                 textAlign: 'center',
